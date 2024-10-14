@@ -1,0 +1,97 @@
+Create Table=>
+CREATE TABLE department (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(100) NOT NULL
+);
+CREATE TABLE students (
+    roll_no INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INT,
+    dept_id INT,  -- This references the department table
+    year_of_study INT,
+    hostel VARCHAR(50) NOT NULL,
+    contact_number VARCHAR(15),
+    FOREIGN KEY (dept_id) REFERENCES department(dept_id)  -- Foreign key reference
+);
+..........................................................................................................................................
+Answer:=>
+1)Create a view of all students in dept CSE.
+=>CREATE VIEW CSE AS
+SELECT 
+    s.roll_no, 
+    s.name, 
+    s.age, 
+    s.year_of_study, 
+    s.hostel, 
+    s.contact_number
+FROM 
+    students s, 
+    department d
+WHERE 
+    s.dept_id = d.dept_id 
+    AND d.dept_name = 'Computer Science';
+............select * from CSE..............................
+2)Create a view named as cse_stud for ‘CSE’ dept students having attributes rollno, name,
+hostel.
+=>CREATE VIEW cse_stud AS
+SELECT 
+    roll_no, 
+    name, 
+    hostel
+FROM 
+    CSE;
+.................select * from cse_stud...........................
+3)Insert a new student of CSE. Analyse the result.
+=>insert into CSE values 
+(202225, 'Xavier Foster', 20, 2, 'Hostel D', '1234567814');
+Error:-
+ERROR:  Views that do not select from a single table or view are not automatically updatable.cannot insert into view "cse" 
+
+ERROR:  cannot insert into view "cse"
+SQL state: 55000
+Detail: Views that do not select from a single table or view are not automatically updatable.
+Hint: To enable inserting into the view, provide an INSTEAD OF INSERT trigger or an unconditional ON INSERT DO INSTEAD rule.
+.......................................................................
+4)Increment parental income by Rs. 5000 (HRA).
+=>update CSE 
+set hostel='Hostel B'
+where roll_no = 202201;
+ERROR:  Views that do not select from a single table or view are not automatically updatable.cannot update view "cse" 
+
+ERROR:  cannot update view "cse"
+SQL state: 55000
+Detail: Views that do not select from a single table or view are not automatically updatable.
+Hint: To enable updating the view, provide an INSTEAD OF UPDATE trigger or an unconditional ON UPDATE DO INSTEAD rule.
+.............................................................................
+5)Delete the view.
+=>
+drop view cse_stud
+drop view CSE
+..............................................................................................................................
+create view =>
+CREATE VIEW MEC AS
+SELECT 
+    s.roll_no, 
+    s.name, 
+    s.age, 
+    s.year_of_study, 
+    s.hostel, 
+    s.contact_number
+FROM 
+    students s, 
+    department d
+WHERE 
+    s.dept_id = d.dept_id 
+    AND d.dept_name = 'Mechanical Engineering';
+...................................................
+ Insert a new student of Mechanical Engineering Department.
+=>insert into MEC values 
+(202225, 'Xavier Foster', 20, 2, 'Hostel D', '1234567814');
+........................................................
+ Delete a student (for a given Name) of the same department
+=>delete  from mec 
+where roll_no=202207
+............................................................
+ Shift a student (for a given Name) from Mechanical to Computer Science.
+all throw a error 
+=> error .
